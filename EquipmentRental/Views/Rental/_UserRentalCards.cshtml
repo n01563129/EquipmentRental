@@ -1,0 +1,51 @@
+@model IEnumerable<EquipmentRental.Models.Rental>
+
+
+        @if (!Model.Any())
+        {
+            <div class="col">
+                <div class="alert alert-info w-100">No rentals found.</div>
+            </div>
+        }
+        else
+        {
+            foreach (var r in Model)
+            {
+                <div class="col">
+                    <div class="card h-100">
+                        <div class="card-header">
+                            <strong>
+                                @(r.Equipment != null ? r.Equipment.Name : "(No Equipment)")
+                            </strong>
+                        </div>
+
+                        <div class="card-body">
+                            <p class="card-text mb-1">
+                                <strong>Start:</strong> @r.RentalStartDate.ToShortDateString() <br />
+                                <strong>End:</strong>   @r.RentalEndDate.ToShortDateString() <br />
+                                <strong>Cost:</strong>  @r.TotalCost.ToString("C")
+                            </p>
+                            <p class="card-text">
+                                <strong>Status:</strong> @r.Status
+                            </p>
+                        </div>
+
+                        <div class="card-footer text-end">
+                            @Html.ActionLink("Details", "Details", new { id = r.ID },
+                                             new { @class = "btn btn-sm btn-outline-primary" })
+
+                            @if (r.Status == "Pending")
+                            {
+                                <span class="ms-1"></span>
+                                @Html.ActionLink("Edit", "Edit", new { id = r.ID },
+                                                 new { @class = "btn btn-sm btn-outline-secondary" })
+                            }
+
+                            <span class="ms-1"></span>
+                            @Html.ActionLink("Delete", "Delete", new { id = r.ID },
+                                             new { @class = "btn btn-sm btn-outline-danger" })
+                        </div>
+                    </div>
+                </div>
+            }
+        }

@@ -1,0 +1,65 @@
+﻿@model EquipmentRental.Models.Rental
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Rental Details";
+    var booked = ViewBag.BookedRanges as IEnumerable<dynamic>;
+}
+
+<h2 class="mb-4">Rental Details</h2>
+
+<div class="card card-body mb-3">
+    <dl class="row">
+        <dt class="col-sm-4">Equipment</dt>
+        <dd class="col-sm-8">
+            @(Model.Equipment != null ? Model.Equipment.Name : "(No Equipment)")
+        </dd>
+
+        <dt class="col-sm-4">Owner</dt>
+        <dd class="col-sm-8">
+            @(Model.Equipment != null && Model.Equipment.Owner != null
+                ? Model.Equipment.Owner.Name
+                : "(No Owner)")
+        </dd>
+
+        <dt class="col-sm-4">Renter</dt>
+        <dd class="col-sm-8">
+            @(Model.Renter != null ? Model.Renter.Name : "(No Renter)")
+        </dd>
+
+        <dt class="col-sm-4">Start Date</dt>
+        <dd class="col-sm-8">@Model.RentalStartDate.ToShortDateString()</dd>
+
+        <dt class="col-sm-4">End Date</dt>
+        <dd class="col-sm-8">@Model.RentalEndDate.ToShortDateString()</dd>
+
+        <dt class="col-sm-4">Total Cost</dt>
+        <dd class="col-sm-8">@Model.TotalCost.ToString("C")</dd>
+
+        <dt class="col-sm-4">Status</dt>
+        <dd class="col-sm-8">@Model.Status</dd>
+    </dl>
+</div>
+
+@if (booked != null && booked.Any())
+{
+    <div class="card card-body mb-3">
+        <h5 class="mb-2">All approved bookings for this equipment</h5>
+        <ul class="list-group">
+            @foreach (var r in booked)
+            {
+                <li class="list-group-item">
+                    @r.RentalStartDate.ToShortDateString()
+                    &nbsp;–&nbsp;
+                    @r.RentalEndDate.ToShortDateString()
+                </li>
+            }
+        </ul>
+    </div>
+}
+
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ID },
+                     new { @class = "btn btn-primary" })
+    @Html.ActionLink("Back to List", "Index", null,
+                     new { @class = "btn btn-secondary ms-2" })
+</p>
